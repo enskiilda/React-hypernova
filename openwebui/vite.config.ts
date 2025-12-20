@@ -1,10 +1,19 @@
-import { sveltekit } from '@sveltejs/kit/vite';
+import react from '@vitejs/plugin-react';
 import { defineConfig } from 'vite';
+import path from 'path';
 
 export default defineConfig({
         plugins: [
-                sveltekit()
+                react()
         ],
+        resolve: {
+                alias: {
+                        '$lib': path.resolve(__dirname, './src/lib'),
+                        '$app/navigation': path.resolve(__dirname, './src/lib/app/navigation.ts'),
+                        '$app/stores': path.resolve(__dirname, './src/lib/app/stores.ts'),
+                        '$app/environment': path.resolve(__dirname, './src/lib/app/environment.ts')
+                }
+        },
         define: {
                 APP_VERSION: JSON.stringify(process.env.npm_package_version),
                 APP_BUILD_HASH: JSON.stringify(process.env.APP_BUILD_HASH || 'dev-build')
@@ -19,7 +28,6 @@ export default defineConfig({
         server: {
                 host: '0.0.0.0',
                 port: 5000,
-                allowedHosts: true,
                 strictPort: false,
                 hmr: {
                         overlay: false
