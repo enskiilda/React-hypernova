@@ -393,7 +393,7 @@ export const extractCurlyBraceWords = (text) => {
 
 export const getUserPosition = async (raw = false) => {
         // Get the user's location using the Geolocation API
-        const position = await new Promise((resolve, reject) => {
+        const position = await new Promise<GeolocationPosition>((resolve, reject) => {
                 navigator.geolocation.getCurrentPosition(resolve, reject);
         }).catch((error) => {
                 console.error('Error getting user location:', error);
@@ -439,13 +439,13 @@ export const processDetails = (content) => {
         if (matches) {
                 for (const match of matches) {
                         const attributesRegex = /(\w+)="([^"]*)"/g;
-                        const attributes = {};
+                        const attributes: Record<string, string> = {};
                         let attributeMatch;
                         while ((attributeMatch = attributesRegex.exec(match)) !== null) {
                                 attributes[attributeMatch[1]] = attributeMatch[2];
                         }
 
-                        content = content.replace(match, `"${attributes.result}"`);
+                        content = content.replace(match, `"${attributes.result ?? ''}"`);
                 }
         }
 
